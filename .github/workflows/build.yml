@@ -1,0 +1,46 @@
+名称: 打包 macOS + Linux
+
+触发条件:
+ push:
+分支: [ 主要 ]
+工作流调度:
+
+作业:
+ build-linux:
+    runs-on: ubuntu-latest
+    步骤:
+      - 使用: actions/checkout@v4
+      - 名称: 安装 Python
+        使用: actions/setup-python@v5
+        with:
+          Python 版本: '3.12'
+      - name: 安装工具
+        run: |
+          sudo apt update
+          sudo apt install -y python3-tk
+          pip install pyinstaller
+      - name: 打包
+        运行: pyinstaller --onefile --windowed Bmi.py
+      - name: 上传
+        使用: actions/upload-artifact@v4
+        with:
+          name: BMI-Linux
+          path: dist/Bmi
+
+  build-macos:
+    运行环境: macos-latest
+    步骤:
+      - 使用: actions/checkout@v4
+      - 名称: 安装 Python
+        使用: actions/setup-python@v5
+        with:
+          Python 版本: '3.12'
+      - 名称: 安装 PyInstaller
+        运行: pip install pyinstaller
+      - name: 打包
+        运行: pyinstaller --onefile --windowed Bmi.py
+      - name: 上传
+        使用: actions/upload-artifact@v4
+        with:
+          名称: BMI-macOS
+          path: dist/Bmi
