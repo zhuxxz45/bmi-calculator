@@ -1,12 +1,12 @@
-名称: 打包 macOS + Linux
+name: 打包 macOS + Linux
 
-触发条件:
- push:
-分支: [ 主要 ]
-工作流调度:
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
 
-作业:
- build-linux:
+jobs:
+  build-linux:
     runs-on: ubuntu-latest
     步骤:
       - 使用: actions/checkout@v4
