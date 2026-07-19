@@ -1,1 +1,46 @@
+﻿name: Build
 
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-tk
+          pip install pyinstaller
+      - name: Build
+        run: pyinstaller --onefile --windowed Bmi.py
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: bmi-linux
+          path: dist/Bmi
+
+  macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install deps
+        run: pip install pyinstaller
+      - name: Build
+        run: pyinstaller --onefile --windowed Bmi.py
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: bmi-macos
+          path: dist/Bmi
